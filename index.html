@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bank Account Management System</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:linear-gradient(135deg,#0f4c81,#3b82f6);display:flex;justify-content:center;align-items:center;min-height:100vh}
+.container{width:550px;background:#fff;padding:30px;border-radius:15px;box-shadow:0 0 20px #0005}
+h1{text-align:center;color:#0f4c81;margin-bottom:20px}
+input,button{width:100%;padding:12px;margin:8px 0;border-radius:8px;font-size:16px}
+input{border:1px solid #ccc}
+button{border:0;background:#0f4c81;color:white;cursor:pointer}
+button:hover{background:#2563eb}
+.buttons{display:flex;gap:10px}.buttons button{flex:1}
+table{width:100%;margin-top:20px;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:10px;text-align:center}
+th{background:#0f4c81;color:white}
+#status{text-align:center;margin-top:15px;font-weight:bold;color:green}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>Bank Account Management System</h1>
+
+<input id="name" placeholder="Account Holder Name">
+<input id="accountNo" placeholder="Account Number">
+<input id="balance" type="number" placeholder="Initial Balance">
+<button onclick="createAccount()">Create Account</button>
+
+<hr>
+
+<input id="amount" type="number" placeholder="Enter Amount">
+<div class="buttons">
+<button onclick="depositMoney()">Deposit</button>
+<button onclick="withdrawMoney()">Withdraw</button>
+</div>
+
+<div id="status"></div>
+<div id="output"></div>
+</div>
+
+<script>
+class BankAccount{
+constructor(n,a,b){this.name=n;this.accountNo=a;this.balance=b}
+deposit(x){this.balance+=x;return"Amount Deposited Successfully."}
+withdraw(x){if(x>this.balance)return"Insufficient Balance.";this.balance-=x;return"Withdrawal Successful."}
+}
+
+let account=null;
+
+function createAccount(){
+let n=name.value,a=accountNo.value,b=Number(balance.value);
+if(!n||!a||b<0)return alert("Please Enter Valid Details");
+account=new BankAccount(n,a,b);
+status.innerHTML="Account Created Successfully.";
+displayAccount();
+}
+
+function depositMoney(){
+if(!account)return alert("Create Account First");
+let x=Number(amount.value);
+if(x<=0)return alert("Enter Valid Amount");
+status.innerHTML=account.deposit(x);
+displayAccount();
+amount.value="";
+}
+
+function withdrawMoney(){
+if(!account)return alert("Create Account First");
+let x=Number(amount.value);
+if(x<=0)return alert("Enter Valid Amount");
+status.innerHTML=account.withdraw(x);
+displayAccount();
+amount.value="";
+}
+
+function displayAccount(){
+output.innerHTML=`
+<h2 style="text-align:center;color:#0f4c81;margin-top:20px">Account Details</h2>
+<table>
+<tr><th>Account Holder</th><td>${account.name}</td></tr>
+<tr><th>Account Number</th><td>${account.accountNo}</td></tr>
+<tr><th>Current Balance</th><td>₹ ${account.balance.toFixed(2)}</td></tr>
+</table>`;
+}
+</script>
+</body>
+</html>
